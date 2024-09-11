@@ -20,3 +20,8 @@ module "lambdas" {
   source      = "./modules/lambdas"
   random_name = module.random.random_name
 }
+
+module "s3" {
+  source      = "./modules/s3"
+  random_name = module.random.random_name
+}
