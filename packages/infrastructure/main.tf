@@ -3,7 +3,9 @@ module "random" {
 }
 
 module "policies" {
-  source = "./modules/policies"
+  source      = "./modules/policies"
+  random_name = module.random.random_name
+  lambdas_bucket_arn = module.s3.lambdas_bucket_arn
 }
 
 module "bedrock" {
