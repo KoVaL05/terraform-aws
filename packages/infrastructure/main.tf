@@ -6,6 +6,7 @@ module "policies" {
   source             = "./modules/policies"
   random_name        = module.random.random_name
   lambdas_bucket_arn = module.s3.lambdas_bucket_arn
+  lambda_functions = module.lambdas.lambda_functions
 }
 
 module "bedrock" {
