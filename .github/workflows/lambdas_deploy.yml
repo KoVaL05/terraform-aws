@@ -1,9 +1,56 @@
-# name: Lambdas - Deploy
-# on:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - "packages/lambdas/**"
+name: Lambdas - Deploy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/lambdas/**"
 
-# jobs:
+jobs:
+  test:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/lambdas
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Tests
+        run: pytest
+
+      - name: Bundle Code
+        run: python setup.py build
+
+      - name: Package Code
+        run: python setup.py sdist bdist_wheel
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: eu-central-1
+
+      - name: Copy files to the production bucket with the AWS CLI
+        run: aws s3 sync dist s3://${{ secrets.AWS_S3_LAMBDAS_BUCKET }} --delete --acl public-read
+
+      - name: Create terraform run to update lambdas from s3://$
+        uses: indiesdev/curl@v1.1
+        with:
+          url: https://app.terraform.io/api/v2/runs
+          method: "POST"
+          accept: 201
+          headers: '{ "Content-Type": "application/vnd.api+json" }'
+          bearer-token: ${{ secrets.TERRAFORM_TOKEN }}
+          body: '{"data":{"type":"runs","attributes":{"message":"Triggered by GitHub Action","auto-apply":true},"relationships":{"workspace":{"data":{"type":"workspaces","id":"${{ secrets.TERRAFORM_WORKSPACE_ID }}"}}}}}'
+          log-response: true

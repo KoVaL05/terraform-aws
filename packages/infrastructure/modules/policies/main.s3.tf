@@ -1,5 +1,5 @@
 resource "aws_iam_policy" "lambdas_bucket_access_role" {
-  name   = format("lambdas_bucket_access_%s", var.random_name)
+  name   = format("lambdas-bucket-access-%s", var.random_name)
   policy = data.aws_iam_policy_document.lambdas_bucket_access_policy.json
 }
 

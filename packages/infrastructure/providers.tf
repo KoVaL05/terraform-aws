@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-north-1"
+  region = "eu-central-1"
   default_tags {
     tags = {
       Project   = "terraform-aws-ai-app"
