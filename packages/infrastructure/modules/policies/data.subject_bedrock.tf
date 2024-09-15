@@ -17,13 +17,3 @@ data "aws_iam_policy_document" "example_agent_trust" {
     }
   }
 }
-
-resource "aws_iam_role" "example" {
-  assume_role_policy = data.aws_iam_policy_document.example_agent_trust.json
-  name_prefix        = "AmazonBedrockExecutionRoleForAgents_"
-}
-
-resource "aws_iam_role_policy" "example" {
-  policy = data.aws_iam_policy_document.example_agent_permissions.json
-  role   = aws_iam_role.example.id
-}

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "lambdas_bucket" {
-  bucket = format("lambdas_bucket_%s")
+  bucket = format("lambdas_bucket_%s", var.random_name)
 }
 
 resource "aws_s3_bucket_public_access_block" "lambdas_bucket_public_access" {

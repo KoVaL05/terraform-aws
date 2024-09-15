@@ -4,7 +4,7 @@ resource "aws_bedrockagent_agent" "subject_bedrock_agent" {
   agent_resource_role_arn = var.subject_agent_role_arn
 
   idle_session_ttl_in_seconds = 60
-  instruction                 = file("./instructions/subject_picker.yml")
+  instruction                 = file("${path.module}/modules/bedrock/instructions/subject_picker.yml")
   description                 = "Agent to subtract subjects from the user query"
 
 }
