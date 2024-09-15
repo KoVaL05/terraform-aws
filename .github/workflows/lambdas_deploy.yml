@@ -54,4 +54,3 @@ jobs:
           bearer-token: ${{ secrets.TERRAFORM_TOKEN }}
           body: '{"data":{"type":"runs","attributes":{"message":"Triggered by GitHub Action","auto-apply":true},"relationships":{"workspace":{"data":{"type":"workspaces","id":"${{ secrets.TERRAFORM_WORKSPACE_ID }}"}}}}}'
           log-response: true
-
