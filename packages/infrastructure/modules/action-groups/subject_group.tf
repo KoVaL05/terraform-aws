@@ -4,7 +4,7 @@ resource "aws_bedrockagent_agent_action_group" "routing_action_group" {
   agent_version              = "DRAFT"
   skip_resource_in_use_check = true
   action_group_executor {
-    lambda = "arn:aws:lambda:us-west-2:123456789012:function:example-function" //
+    lambda = var.subject_lambda_arn
   }
   function_schema {
     member_functions {

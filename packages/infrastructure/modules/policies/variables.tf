@@ -3,5 +3,5 @@ variable "random_name" {
 }
 
 variable "lambdas_bucket_arn" {
-    type = string
+  type = string
 }

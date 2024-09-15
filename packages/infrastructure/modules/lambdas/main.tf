@@ -13,4 +13,8 @@ resource "aws_lambda_function" "lambda_functions" {
   timeout       = 60
   memory_size   = 128
   publish       = true
+
+  handler   = "index.handler"
+  s3_bucket = var.lambdas_bucket_arn
+  s3_key    = format("%s/%s.zip", each.key, each.key)
 }

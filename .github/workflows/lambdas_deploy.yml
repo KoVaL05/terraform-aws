@@ -1,0 +1,9 @@
+# name: Lambdas - Deploy
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "packages/lambdas/**"
+
+# jobs:
