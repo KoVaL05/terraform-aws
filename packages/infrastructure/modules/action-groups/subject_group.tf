@@ -1,5 +1,5 @@
 resource "aws_bedrockagent_agent_action_group" "routing_action_group" {
-  action_group_name          = "routing_action_group"
+  action_group_name          = "routing-action-group"
   agent_id                   = var.subject_agent_id
   agent_version              = "DRAFT"
   skip_resource_in_use_check = true
