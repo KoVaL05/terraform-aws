@@ -17,7 +17,7 @@ module "bedrock" {
 module "action_groups" {
   source             = "./modules/action-groups"
   subject_agent_id   = module.bedrock.subject_agent_id
-  subject_lambda_arn = module.lambdas.lambda_functions["subject_group_executor"]
+  subject_lambda_arn = module.lambdas.lambda_functions["subject_group_executor"].arn
 }
 
 module "lambdas" {
