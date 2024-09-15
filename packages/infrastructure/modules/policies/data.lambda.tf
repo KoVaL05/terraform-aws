@@ -2,7 +2,7 @@ data "aws_iam_policy_document" "lambda_policies" {
   for_each = var.lambda_functions
 
   statement {
-    sid = "RoleForBasicLambdaLogs"
+    sid = "RoleForLambdaLogs"
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
