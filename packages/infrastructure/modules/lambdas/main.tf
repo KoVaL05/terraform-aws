@@ -16,6 +16,6 @@ resource "aws_lambda_function" "lambda_functions" {
   publish       = true
 
   handler   = "index.handler"
-  s3_bucket = var.lambdas_bucket_arn
+  s3_bucket = var.lambdas_bucket_name
   s3_key    = format("%s/%s.zip", each.key, each.key)
 }

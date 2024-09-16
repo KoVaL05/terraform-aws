@@ -6,7 +6,7 @@ module "policies" {
   source             = "./modules/policies"
   random_name        = module.random.random_name
   lambdas_bucket_arn = module.s3.lambdas_bucket_arn
-  lambda_functions = module.lambdas.lambda_functions
+  lambda_functions   = module.lambdas.lambda_functions
 }
 
 module "bedrock" {
@@ -22,9 +22,10 @@ module "action_groups" {
 }
 
 module "lambdas" {
-  source             = "./modules/lambdas"
-  random_name        = module.random.random_name
-  lambdas_bucket_arn = module.s3.lambdas_bucket_arn
+  source              = "./modules/lambdas"
+  random_name         = module.random.random_name
+  lambdas_bucket_arn  = module.s3.lambdas_bucket_arn
+  lambdas_bucket_name = module.s3.lambda_bucket_name
 }
 
 module "s3" {
