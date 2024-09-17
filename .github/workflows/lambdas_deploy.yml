@@ -29,8 +29,8 @@ jobs:
 
       - name: Install dependencies and package lambdas
         run: |
-          for lambda in $(ls packages/lambdas); do
-            cd packages/lambdas/$lambda
+          for lambda in $(ls ./packages/lambdas); do
+            cd ./packages/lambdas/$lambda
             
             if [ -f requirements.txt ]; then
               pip install -r requirements.txt -t .
@@ -41,7 +41,7 @@ jobs:
           done
 
       - name: Sync with S3
-        run: aws s3 sync . s3://${{secrets.AWS_BUCKET_NAME}}/ --exclude "*" --include "*.zip" --delete --acl public-read
+        run: aws s3 sync . s3://${{secrets.AWS_BUCKET_NAME}} --exclude "*" --include "*.zip" --delete --acl public-read
 
       - name: Create terraform run to update lamdas from S3
         uses: indiesdev/curl@v1.1
