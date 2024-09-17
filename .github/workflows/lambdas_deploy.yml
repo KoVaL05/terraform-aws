@@ -11,32 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Assume AWS role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{secrets.AWS_IAM_ROLE}}
+          aws-region: eu-central-1
 
-      - name: Set up Python
+      - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
 
-      - name: Install dependencies
+      - name: Install dependencies and package lambdas
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          for lambda in $(ls packages/lambdas); do
+            cd packages/lambdas/$lambda
+            
+            if [ -f requirements.txt ]; then
+              pip install -r requirements.txt -t .
+            fi
 
-      - name: Zip Lambda function
-        run: |
-          zip -r9 lambda_function.zip . -x '*.git*'
+            zip -r ../../$lambda.zip .
+            cd ../..
+          done
 
-      - name: Assume role from OICD provider
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{secrets.AWS_IAM_ROLE}}
-          aws-region: eu-central-1
-      - name: Deploy code to s3
-        run: |
-          aws s3 cp lambda_function.zip s3://${{secrets.AWS_BUCKET_NAME}}/lambda_function.zip
-      - name: Run Terraform plan
+      - name: Sync with S3
+        run: aws s3 sync . s3://${{secrets.AWS_BUCKET_NAME}}/ --exclude "*" --include "*.zip" --delete --acl public-read
+
+      - name: Create terraform run to update lamdas from S3
         uses: indiesdev/curl@v1.1
         with:
           url: https://app.terraform.io/api/v2/runs
