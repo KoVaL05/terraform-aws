@@ -1,6 +1,0 @@
-# name: Lambdas - Test
-# on:
-#   push:
-#     paths:
-#       - "packages/lambdas/**"
-# jobs:
