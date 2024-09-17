@@ -8,8 +8,13 @@ on:
 
 jobs:
   deploy:
+    permissions:
+      id-token: write
+      contents: read
+    # defaults:
+    #   run:
+    #     working-directory: packages/lambdas
     runs-on: ubuntu-latest
-
     steps:
       - name: Assume AWS role
         uses: aws-actions/configure-aws-credentials@v1
