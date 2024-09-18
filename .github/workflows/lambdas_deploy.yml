@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies and package lambdas
         run: |
-          for lambda in $(ls .); do
+          for lambda in $(ls -d */); do
             cd $lambda
             
             if [ -f requirements.txt ]; then
