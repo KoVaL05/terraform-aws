@@ -40,7 +40,6 @@ jobs:
             zip -r $lambda.zip .
             cd ..
           done
-          done
 
       - name: Sync with S3
         run: aws s3 sync . s3://${{secrets.AWS_BUCKET_NAME}} --exclude "*" --include "*.zip" --delete --acl public-read
