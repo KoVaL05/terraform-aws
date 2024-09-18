@@ -4,7 +4,8 @@ data "aws_iam_policy_document" "lambdas_bucket_access_policy" {
     actions = [
       "s3:DeleteObject",
       "s3:PutObject",
-      "s3:ListBucket"
+      "s3:ListBucket",
+      "s3:PutObjectAcl"
     ]
     effect = "Allow"
     resources = [
