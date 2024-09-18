@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies and package lambdas
         run: |
-          for lambda in $(ls -d */); do
+          for lambda in $(ls -d */ | sed 's|[/]||g'); do
             cd $lambda
             
             if [ -f requirements.txt ]; then
@@ -38,6 +38,8 @@ jobs:
             fi
 
             zip -r $lambda.zip .
+            cd ..
+          done
           done
 
       - name: Sync with S3
