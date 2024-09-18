@@ -19,5 +19,5 @@ resource "aws_lambda_function" "lambda_functions" {
   s3_bucket = var.lambdas_bucket_name
   s3_key    = format("%s/%s.zip", each.key, each.key)
 
-  source_code_hash = data.aws_s3_object.object.checksum_sha256
+  source_code_hash = data.aws_s3_object.object[each.key].checksum_sha256
 }
