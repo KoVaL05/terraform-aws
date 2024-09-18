@@ -24,6 +24,6 @@ def handler(event, context):
     }
 
     dummy_function_response = {'response': action_response, 'messageVersion': event['messageVersion']}
-    print("Response!: {}".format(dummy_function_response))
+    print("Response: {}".format(dummy_function_response))
 
     return dummy_function_response
