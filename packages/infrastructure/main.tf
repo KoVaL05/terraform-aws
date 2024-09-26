@@ -32,3 +32,12 @@ module "s3" {
   source      = "./modules/s3"
   random_name = module.random.random_name
 }
+
+module "dynamodb" {
+  source = "./modules/dynamodb"
+  random_name = module.random.random_name
+}
+
+module "cognito" {
+  source = "./modules/cognito"
+}
