@@ -1,7 +1,7 @@
 resource "aws_dynamodb_table" "api_key_table" {
-  name = format("api_key_table_%s")
+  name         = format("api_key_table_%s", var.random_name)
   billing_mode = "PAY_PER_REQUEST"
-  hash_key = "ID"
+  hash_key     = "ID"
 
   stream_enabled = true
 
@@ -25,16 +25,16 @@ resource "aws_dynamodb_table" "api_key_table" {
     type = "S"
   }
 
-    ttl {
+  ttl {
     attribute_name = "Timestamp"
-    }
+  }
 
-   global_secondary_index {
+  global_secondary_index {
     name               = "KeyTypeIndex"
     hash_key           = "KeyType"
     range_key          = "UID"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["ApiKey","Timestamp"]
+    non_key_attributes = ["ApiKey", "Timestamp"]
   }
 
   global_secondary_index {
@@ -42,6 +42,6 @@ resource "aws_dynamodb_table" "api_key_table" {
     hash_key           = "UID"
     range_key          = "KeyType"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["ApiKey","Timestamp"]
+    non_key_attributes = ["ApiKey", "Timestamp"]
   }
 }
