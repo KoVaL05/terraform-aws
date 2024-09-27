@@ -26,11 +26,6 @@ resource "aws_dynamodb_table" "api_key_table" {
     type = "S"
   }
 
-  ttl {
-    attribute_name = "Timestamp"
-    enabled        = false
-  }
-
   global_secondary_index {
     name               = "KeyTypeIndex"
     hash_key           = "KeyType"
