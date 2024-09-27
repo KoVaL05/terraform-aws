@@ -34,13 +34,13 @@ module "s3" {
 }
 
 module "dynamodb" {
-  source = "./modules/dynamodb"
+  source      = "./modules/dynamodb"
   random_name = module.random.random_name
 }
 
 module "cognito" {
-  source = "./modules/cognito"
-  random_name = module.random.random_name
-  gcp_client_id = var.gcp_client_id
+  source            = "./modules/cognito"
+  random_name       = module.random.random_name
+  gcp_client_id     = var.gcp_client_id
   gcp_client_secret = var.gcp_client_secret
 }

@@ -28,6 +28,7 @@ resource "aws_dynamodb_table" "api_key_table" {
 
   ttl {
     attribute_name = "Timestamp"
+    enabled        = false
   }
 
   global_secondary_index {
