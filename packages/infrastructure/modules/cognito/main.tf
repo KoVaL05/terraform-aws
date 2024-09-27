@@ -31,11 +31,11 @@ resource "aws_cognito_user_pool_client" "default_client" {
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows = ["implicit"]
   allowed_oauth_scopes = ["profile","email","openid"]
-  
+
   supported_identity_providers = [aws_cognito_identity_provider.google_provider.provider_name]
   access_token_validity = 10
   id_token_validity = 10
-  refresh_token_validity = 3
+  refresh_token_validity = 5
 
   read_attributes = ["nickname","profile","picture","name"]
   write_attributes = ["nickname","profile","picture"]
