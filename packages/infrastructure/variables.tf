@@ -1,7 +1,3 @@
-variable "random_name" {
-  type = string
-}
-
 variable "gcp_client_secret" {
   type = string
 }

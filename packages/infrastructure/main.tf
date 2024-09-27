@@ -40,4 +40,7 @@ module "dynamodb" {
 
 module "cognito" {
   source = "./modules/cognito"
+  random_name = module.random.random_name
+  gcp_client_id = var.gcp_client_id
+  gcp_client_secret = var.gcp_client_secret
 }
