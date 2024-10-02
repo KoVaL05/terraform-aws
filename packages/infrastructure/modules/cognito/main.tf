@@ -40,6 +40,9 @@ resource "aws_cognito_user_pool_client" "default_client" {
   id_token_validity            = 10
   refresh_token_validity       = 5
 
+  default_redirect_uri = "aethera://"
+  logout_urls = ["aethera://"]
+
   read_attributes  = ["nickname", "profile", "picture", "name"]
   write_attributes = ["nickname", "profile", "picture"]
   token_validity_units {
