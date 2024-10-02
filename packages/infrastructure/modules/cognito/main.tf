@@ -29,11 +29,10 @@ resource "aws_cognito_user_pool_client" "default_client" {
   generate_secret = true
 
   # allowed_oauth_flows_user_pool_client = true
-  # callback_urls                        = ["https://example.com"]
   # allowed_oauth_flows                  = ["implicit"]
   # allowed_oauth_scopes                 = ["profile", "email", "openid"]
 
-  explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_CUSTOM_AUTH", "ALLOW_USER_SRP_AUTH","ALLOW_USER_PASSWORD_AUTH"]
+  explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_CUSTOM_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_USER_PASSWORD_AUTH"]
 
   supported_identity_providers = [aws_cognito_identity_provider.google_provider.provider_name]
   access_token_validity        = 10
@@ -41,7 +40,8 @@ resource "aws_cognito_user_pool_client" "default_client" {
   refresh_token_validity       = 5
 
   default_redirect_uri = "aethera://"
-  logout_urls = ["aethera://"]
+  callback_urls        = ["aethera://"]
+  logout_urls          = ["aethera://"]
 
   read_attributes  = ["nickname", "profile", "picture", "name"]
   write_attributes = ["nickname", "profile", "picture"]
