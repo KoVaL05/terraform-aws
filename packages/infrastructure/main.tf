@@ -45,3 +45,10 @@ module "cognito" {
   gcp_web_client_id     = var.gcp_web_client_id
   gcp_web_client_secret = var.gcp_web_client_secret
 }
+
+module "secrets_manager" {
+  source = "./modules/secrets_manager"
+  aethera_app_secret = { userPoolId = module.cognito.client_pool_id
+  clientPoolId = module.cognito.user_pool_id }
+
+}
