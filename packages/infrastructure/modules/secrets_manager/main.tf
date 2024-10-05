@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "aethera_app_secret" {
-  name = "aethera_app"
+  name = "aethera_flutter_app"
 }
 
 resource "aws_secretsmanager_secret_version" "aethera_secret_value" {
