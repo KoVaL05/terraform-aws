@@ -31,18 +31,30 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return Authenticator(
-      child: MaterialApp(
-        builder: Authenticator.builder(),
-        home: const Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SignOutButton(),
-                Text('TODO Application'),
-              ],
-            ),
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () async {
+                    final userAttributes = {
+                      AuthUserAttributeKey.email: "fifiw2005@gmail.com",
+                    };
+                    try {
+                      var result = await Amplify.Auth.signUp(
+                          username: "filip",
+                          password: "zaq1@WSX",
+                          options: SignUpOptions(userAttributes: userAttributes));
+                      print("RESULT $result");
+                    } catch (e) {
+                      print("ERROR $e");
+                    }
+                  },
+                  child: Text("ELO")),
+              Text('TODO Application'),
+            ],
           ),
         ),
       ),
