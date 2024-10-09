@@ -9,9 +9,9 @@ resource "aws_cognito_identity_provider" "google_provider" {
     client_secret    = var.gcp_web_client_secret
   }
   attribute_mapping = {
-    email    = "email"
-    username = "sub"
-    name = "name"
+    email       = "email"
+    username    = "sub"
+    name        = "name"
     family_name = "family_name"
   }
 }
