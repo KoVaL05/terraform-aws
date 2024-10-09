@@ -39,14 +39,15 @@ class MyApp extends StatelessWidget {
             children: [
               ElevatedButton(
                   onPressed: () async {
-                    final userAttributes = {
-                      AuthUserAttributeKey.email: "fifiw2005@gmail.com",
-                    };
+                    // final userAttributes = {
+                    //   AuthUserAttributeKey.email: "fifiw2005@gmail.com",
+                    // };
                     try {
                       var result = await Amplify.Auth.signUp(
-                          username: "filip",
-                          password: "zaq1@WSX",
-                          options: SignUpOptions(userAttributes: userAttributes));
+                        username: "filip",
+                        password: "zaq1@WSX",
+                      );
+                      // options: SignUpOptions(userAttributes: userAttributes));
                       print("RESULT $result");
                     } catch (e) {
                       print("ERROR $e");
