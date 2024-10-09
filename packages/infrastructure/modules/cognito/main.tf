@@ -20,7 +20,51 @@ resource "aws_cognito_user_pool" "default_user_pool" {
     }
   }
 
-  //TODO lambda_config
+  email_configuration {
+    email_sending_account = "COGNITO_DEFAULT"
+  }
+
+  verification_message_template {
+    default_email_option = "CONFIRM_WITH_CODE"
+    email_subject        = "Your verification code"
+    email_message        = "Your verification code is {####}. "
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    name                     = "name"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      max_length = 50
+      min_length = 1
+    }
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    name                     = "email"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      max_length = 50
+      min_length = 1
+    }
+  }
+  schema {
+    attribute_data_type      = "String"
+    name                     = "family_name"
+    developer_only_attribute = false
+    mutable                  = true
+    required                 = true
+    string_attribute_constraints {
+      max_length = 50
+      min_length = 1
+    }
+    //TODO lambda_config
+  }
 }
 
 resource "aws_cognito_user_pool_client" "default_client" {
@@ -43,8 +87,8 @@ resource "aws_cognito_user_pool_client" "default_client" {
   callback_urls        = ["aethera://"]
   logout_urls          = ["aethera://"]
 
-  read_attributes  = ["nickname", "profile", "picture", "name"]
-  write_attributes = ["nickname", "profile", "picture"]
+  read_attributes  = ["nickname", "profile", "picture", "email", "name", "family_name"]
+  write_attributes = ["nickname", "profile", "picture", "email", "name", "family_name"]
   token_validity_units {
     access_token  = "minutes"
     id_token      = "minutes"
