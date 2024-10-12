@@ -26,6 +26,13 @@ final amplifyConfig = ''' {
             "passwordProtectionSettings": {
                 "passwordPolicyMinLength": 8,
                 "passwordPolicyCharacters": []
+            },
+            "OAuth": {
+              "WebDomain": "https://test-3d4u1ltw.auth.eu-central-1.amazoncognito.com/oauth2/authorize",
+              "AppClientId": "${dotenv.env["CLIENT_POOL_ID"]}",
+              "SignInRedirectURI": "aethera://",
+              "SignOutRedirectURI": "aethera://",
+              "Scopes": ["openid", "email", "profile"]
             }
           }
         }
