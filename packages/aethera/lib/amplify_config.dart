@@ -28,11 +28,12 @@ final amplifyConfig = ''' {
                 "passwordPolicyCharacters": []
             },
             "OAuth": {
-              "WebDomain": "https://test-3d4u1ltw.auth.eu-central-1.amazoncognito.com/oauth2/authorize",
+              "WebDomain": "https://test-3d4u1ltw.auth.eu-central-1.amazoncognito.com",
               "AppClientId": "${dotenv.env["CLIENT_POOL_ID"]}",
-              "SignInRedirectURI": "aethera://",
-              "SignOutRedirectURI": "aethera://",
-              "Scopes": ["openid", "email", "profile"]
+              "SignInRedirectURI": "aethera://test/",
+              "SignOutRedirectURI": "aethera://test/",
+              "Scopes": ["openid", "email", "profile"],
+              "ResponseType":"token"
             }
           }
         }

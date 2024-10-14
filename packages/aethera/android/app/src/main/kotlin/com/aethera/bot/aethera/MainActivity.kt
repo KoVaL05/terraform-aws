@@ -1,4 +1,4 @@
-package com.aethera.bot.aethera
+package com.aethera.bot
 
 import io.flutter.embedding.android.FlutterActivity
 
