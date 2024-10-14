@@ -2,9 +2,8 @@ resource "aws_cognito_user_pool" "default_user_pool" {
   name = "default"
 
   auto_verified_attributes = ["email"]
-  alias_attributes         = ["email", "preferred_username"]
+  username_attributes      = ["email"]
   deletion_protection      = "ACTIVE"
-
   password_policy {
     minimum_length    = 8
     require_lowercase = true
