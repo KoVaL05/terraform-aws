@@ -8,15 +8,15 @@ plugins {
 android {
     namespace = "com.aethera.bot"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_21
     }
 
     defaultConfig {
@@ -24,7 +24,7 @@ android {
         applicationId = "com.aethera.bot"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 24
+        minSdkVersion = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

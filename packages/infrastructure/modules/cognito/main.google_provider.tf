@@ -4,7 +4,7 @@ resource "aws_cognito_identity_provider" "google_provider" {
   provider_type = "Google"
 
   provider_details = {
-    authorize_scopes = "email"
+    authorize_scopes = "email profile"
     client_id        = var.gcp_web_client_id
     client_secret    = var.gcp_web_client_secret
   }
