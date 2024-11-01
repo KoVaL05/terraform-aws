@@ -11,6 +11,7 @@ class LoginForm extends StatelessWidget {
         SizedBox(
             width: 300,
             child: TextField(
+              controller: emailController,
               decoration: InputDecoration(
                   hintText: "email@aethera.com",
                   hintStyle: TextStyle(
@@ -29,6 +30,7 @@ class LoginForm extends StatelessWidget {
         SizedBox(
             width: 300,
             child: TextField(
+              controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
                   hintText: "###-###-###",
@@ -49,8 +51,10 @@ class LoginForm extends StatelessWidget {
             width: 300,
             child: ElevatedButton(
                 onPressed: () async {
-                  var result =
-                      await Amplify.Auth.signIn(username: emailController.text, password: passwordController.text);
+                  final username = emailController.text.trim().replaceAll(RegExp(r'[@.]'), '_');
+                  print("USERNAME $username");
+                  var result = await Amplify.Auth.signIn(
+                      username: emailController.text.trim(), password: passwordController.text);
                   print("SIGN IN RESULT $result");
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF15BE7B)),

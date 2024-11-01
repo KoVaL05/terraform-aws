@@ -2,7 +2,7 @@ resource "aws_cognito_user_pool" "default_user_pool" {
   name = "default"
 
   auto_verified_attributes = ["email"]
-  alias_attributes = ["email"]
+  username_attributes = [ "email" ]
   deletion_protection      = "ACTIVE"
   password_policy {
     minimum_length    = 8
@@ -62,7 +62,10 @@ resource "aws_cognito_user_pool" "default_user_pool" {
       max_length = 50
       min_length = 1
     }
-    //TODO lambda_config
+  }
+
+  lambda_config {
+    pre_sign_up = var.pre_signup_lambda_arn
   }
 }
 
