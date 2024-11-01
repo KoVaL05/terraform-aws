@@ -30,8 +30,8 @@ final amplifyConfig = ''' {
             "OAuth": {
               "WebDomain": "https://test-3d4u1ltw.auth.eu-central-1.amazoncognito.com",
               "AppClientId": "${dotenv.env["CLIENT_POOL_ID"]}",
-              "SignInRedirectURI": "aethera://test/",
-              "SignOutRedirectURI": "aethera://test/",
+              "SignInRedirectURI": "aethera://",
+              "SignOutRedirectURI": "aethera://",
               "Scopes": ["openid", "email", "profile"],
               "ResponseType":"token"
             }

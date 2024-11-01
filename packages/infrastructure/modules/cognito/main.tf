@@ -2,7 +2,7 @@ resource "aws_cognito_user_pool" "default_user_pool" {
   name = "default"
 
   auto_verified_attributes = ["email"]
-  username_attributes      = ["email"]
+  alias_attributes = ["email"]
   deletion_protection      = "ACTIVE"
   password_policy {
     minimum_length    = 8
@@ -70,14 +70,14 @@ resource "aws_cognito_user_pool_client" "default_client" {
   name            = "client"
   user_pool_id    = aws_cognito_user_pool.default_user_pool.id
   generate_secret = false
-
+  
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["profile", "email", "openid"]
 
   explicit_auth_flows = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_CUSTOM_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_USER_PASSWORD_AUTH"]
 
-  supported_identity_providers = [aws_cognito_identity_provider.google_provider.provider_name]
+  supported_identity_providers = ["COGNITO", "Google"]
   access_token_validity        = 10
   id_token_validity            = 10
   refresh_token_validity       = 5
