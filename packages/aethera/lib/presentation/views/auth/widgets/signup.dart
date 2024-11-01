@@ -98,9 +98,8 @@ class SignupForm extends StatelessWidget {
                 onPressed: () async {
                   final userAttributes = {
                     AuthUserAttributeKey.name: nameController.text.trim(),
-                    AuthUserAttributeKey.familyName: surnameController.text.trim()
+                    AuthUserAttributeKey.familyName: surnameController.text.trim(),
                   };
-
                   var result = await Amplify.Auth.signUp(
                       username: emailController.text.trim(),
                       password: passwordController.text,
