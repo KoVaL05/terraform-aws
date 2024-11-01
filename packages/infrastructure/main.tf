@@ -44,7 +44,7 @@ module "cognito" {
   random_name           = module.random.random_name
   gcp_web_client_id     = var.gcp_web_client_id
   gcp_web_client_secret = var.gcp_web_client_secret
-  pre_signup_lambda_arn = module.lambdas.lambda_functions["pre_signup"].arn
+  lambda_functions      = module.lambdas.lambda_functions
 }
 
 module "secrets_manager" {
