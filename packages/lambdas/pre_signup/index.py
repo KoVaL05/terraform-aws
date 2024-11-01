@@ -1,4 +1,4 @@
-def lambda_handler(event, context):
+def handler(event, context):
     print("EVENT",event)
     print("CONTEXT",context)
     # Return to Amazon Cognito
