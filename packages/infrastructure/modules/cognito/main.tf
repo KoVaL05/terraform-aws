@@ -65,7 +65,7 @@ resource "aws_cognito_user_pool" "default_user_pool" {
   }
 
   lambda_config {
-    pre_sign_up = var.lambda_functions["pre_signup"].invoke_arn
+    pre_sign_up = var.lambda_functions["pre_signup"].arn
   }
 }
 
