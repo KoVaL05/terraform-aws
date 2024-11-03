@@ -1,14 +1,6 @@
 module "random" {
   source = "./modules/random"
 }
-
-module "policies" {
-  source             = "./modules/policies"
-  random_name        = module.random.random_name
-  lambdas_bucket_arn = module.s3.lambdas_bucket_arn
-  lambda_functions   = module.lambdas.lambda_functions
-}
-
 module "bedrock" {
   source                 = "./modules/bedrock"
   random_name            = module.random.random_name
@@ -52,4 +44,12 @@ module "secrets_manager" {
   aethera_app_secret = { userPoolId = module.cognito.client_pool_id
   clientPoolId = module.cognito.user_pool_id }
 
+}
+
+module "policies" {
+  source             = "./modules/policies"
+  random_name        = module.random.random_name
+  lambdas_bucket_arn = module.s3.lambdas_bucket_arn
+  lambda_functions   = module.lambdas.lambda_functions
+  user_pool_id = module.cognito.user_pool_id
 }
