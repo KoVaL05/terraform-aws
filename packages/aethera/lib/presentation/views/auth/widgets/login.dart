@@ -51,11 +51,16 @@ class LoginForm extends StatelessWidget {
             width: 300,
             child: ElevatedButton(
                 onPressed: () async {
+                  try {
+                    await Amplify.Auth.signOut();
+                  } catch (e) {}
                   final username = emailController.text.trim().replaceAll(RegExp(r'[@.]'), '_');
                   print("USERNAME $username");
                   var result = await Amplify.Auth.signIn(
                       username: emailController.text.trim(), password: passwordController.text);
                   print("SIGN IN RESULT $result");
+                  var user = await Amplify.Auth.getCurrentUser();
+                  print("FETCH ${user}");
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF15BE7B)),
                 child: Text("Log in",
@@ -65,8 +70,13 @@ class LoginForm extends StatelessWidget {
             child: ElevatedButton(
                 onPressed: () async {
                   try {
+                    try {
+                      await Amplify.Auth.signOut();
+                    } catch (e) {}
                     var result = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
                     print("SIGN IN WITH GOOGLE RESULT $result");
+                    var user = await Amplify.Auth.getCurrentUser();
+                    print("FETCH ${user}");
                   } catch (e) {
                     print("ERROR $e");
                   }

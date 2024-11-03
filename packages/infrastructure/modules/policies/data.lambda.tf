@@ -26,4 +26,20 @@ data "aws_iam_policy_document" "lambda_policies" {
       "*"
     ]
   }
+
+  dynamic "statement" {
+    for_each = each.value.permissions.link_users ? [each.key] : []
+
+    content {
+      sid = "RoleForLinkingUsers"
+      actions = [
+        "cognito-idp:ListUsers",
+        "cognito-idp:AdminLinkProviderForUser"
+      ]
+      effect = "Allow"
+      resources = [
+        format("arn:aws:cognito-idp:%s:%s:%s", data.aws_region.current.name, data.aws_caller_identity.current.account_id, var.user_pool_id)
+      ]
+    }
+  }
 }

@@ -13,14 +13,12 @@ logger = Logger()
 def get_user_by_email(email: str, userPoolId: str, cognitoClient: CognitoIdentityProviderClient) -> List[UserTypeTypeDef]:
     return cognitoClient.list_users(
         UserPoolId=userPoolId,
-        Filter=[
-            'email = "{email}"'
-        ],
+        Filter=f'email = "{email}"',
         Limit=2
     ).get("Users",[])
 
 def link_provider_to_user(username: str, userPoolId: str, providerName: str, providerUserId: str, cognitoClient: CognitoIdentityProviderClient):
-    cognitoClient.admin_link_provider_for_user(
+    return cognitoClient.admin_link_provider_for_user(
         UserPoolId=userPoolId,
         DestinationUser={
             'ProviderName': 'Cognito',
@@ -32,7 +30,6 @@ def link_provider_to_user(username: str, userPoolId: str, providerName: str, pro
             'ProviderAttributeValue': providerUserId
         }
     )
-    return
 class PreSignUpTriggerSource(Enum):
     COGNITO_SIGNUP = "PreSignUp_SignUp"
     EXTERNAL_PROVIDER = "PreSignUp_ExternalProvider"
@@ -49,11 +46,13 @@ def handler(event: dict, context: LambdaContext):
     print("CONTEXT",context)
     cognitoClient: CognitoIdentityProviderClient = boto3.client('cognito-idp')
     translatedEvent = PreSignUpTriggerEvent(event)
-    triggerSource = PreSignUpTriggerEvent(translatedEvent.trigger_source)
-
+    triggerSource = PreSignUpTriggerSource(translatedEvent.trigger_source)
+    logger.info(f"TRIGGERSOURCE {triggerSource}")
     if triggerSource == PreSignUpTriggerSource.EXTERNAL_PROVIDER:
         usersResult = get_user_by_email(translatedEvent.request.user_attributes["email"], translatedEvent.user_pool_id, cognitoClient)
+        logger.info(f"USERRESULT {usersResult}")
         if len(usersResult) > 0:
             [providerName,providerUserId] = translatedEvent.user_name.split("_")
-            link_provider_to_user(usersResult[0]["Username"], translatedEvent.user_pool_id, providerName, providerUserId, cognitoClient)
+            res = link_provider_to_user(usersResult[0]["Username"], translatedEvent.user_pool_id, providerName, providerUserId, cognitoClient)
+            logger.info(f"RESULT {res}")
     return event
