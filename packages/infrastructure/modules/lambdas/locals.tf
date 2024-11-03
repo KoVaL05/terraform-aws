@@ -4,7 +4,7 @@ locals {
       allow_agent_execution    = true
       allow_userpool_execution = false
       permissions = {
-       link_users = false
+        link_users = false
       }
     },
     "pre_signup" = {

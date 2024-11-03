@@ -51,5 +51,5 @@ module "policies" {
   random_name        = module.random.random_name
   lambdas_bucket_arn = module.s3.lambdas_bucket_arn
   lambda_functions   = module.lambdas.lambda_functions
-  user_pool_id = module.cognito.user_pool_id
+  user_pool_id       = module.cognito.user_pool_id
 }
