@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "lambda_policies" {
       ]
       effect = "Allow"
       resources = [
-        format("arn:aws:cognito-idp:%s:%s:%s", data.aws_region.current.name, data.aws_caller_identity.current.account_id, var.user_pool_arn)
+        format("arn:aws:cognito-idp:%s:%s:userpool/%s", data.aws_region.current.name, data.aws_caller_identity.current.account_id, var.user_pool_arn)
       ]
     }
   }
