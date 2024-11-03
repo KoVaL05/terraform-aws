@@ -13,6 +13,6 @@ variable "lambda_functions" {
   }))
 }
 
-variable "user_pool_id" {
+variable "user_pool_arn" {
   type = string
 }
