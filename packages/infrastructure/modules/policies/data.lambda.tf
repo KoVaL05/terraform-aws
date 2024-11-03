@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "lambda_policies" {
   }
 
   dynamic "statement" {
-    for_each = each.value.link_users ? [each.key] : []
+    for_each = each.value.permissions.link_users ? [each.key] : []
 
     content {
       sid = "RoleForLinkingUsers"
