@@ -20,7 +20,18 @@ def get_user_by_email(email: str, userPoolId: str, cognitoClient: CognitoIdentit
     ).get("Users",[])
 
 def link_provider_to_user(username: str, userPoolId: str, providerName: str, providerUserId: str, cognitoClient: CognitoIdentityProviderClient):
-    cognitoClient.admin_link_provider_for_user()
+    cognitoClient.admin_link_provider_for_user(
+        UserPoolId=userPoolId,
+        DestinationUser={
+            'ProviderName': 'Cognito',
+            'ProviderAttributeValue': username
+        },
+        SourceUser={
+            'ProviderName': providerName,
+            'ProviderAttributeName': 'Cognito_Subject',
+            'ProviderAttributeValue': providerUserId
+        }
+    )
     return
 class PreSignUpTriggerSource(Enum):
     COGNITO_SIGNUP = "PreSignUp_SignUp"
@@ -43,5 +54,5 @@ def handler(event: dict, context: LambdaContext):
         usersResult = get_user_by_email(translatedEvent.request.user_attributes["email"], translatedEvent.user_pool_id, cognitoClient)
         if len(usersResult) > 0:
             [providerName,providerUserId] = translatedEvent.user_name.split("_")
-        return
+            link_provider_to_user(usersResult[0]["Username"], translatedEvent.user_pool_id, providerName, providerUserId, cognitoClient)
     return event
