@@ -13,9 +13,7 @@ logger = Logger()
 def get_user_by_email(email: str, userPoolId: str, cognitoClient: CognitoIdentityProviderClient) -> List[UserTypeTypeDef]:
     return cognitoClient.list_users(
         UserPoolId=userPoolId,
-        Filter=[
-            f'email = "{email}"'
-        ],
+        Filter=f'email = "{email}"',
         Limit=2
     ).get("Users",[])
 
