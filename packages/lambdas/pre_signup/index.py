@@ -44,6 +44,7 @@ class PreSignUpTriggerSource(Enum):
     
 @logger.inject_lambda_context
 def handler(event: dict, context: LambdaContext):
+    logger.info("TEST")
     print("EVENT",event)
     print("CONTEXT",context)
     cognitoClient: CognitoIdentityProviderClient = boto3.client('cognito-idp')
