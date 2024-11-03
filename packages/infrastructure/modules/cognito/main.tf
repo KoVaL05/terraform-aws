@@ -89,8 +89,8 @@ resource "aws_cognito_user_pool_client" "default_client" {
   callback_urls        = ["aethera://"]
   logout_urls          = ["aethera://"]
 
-  read_attributes  = ["nickname", "profile", "picture", "email", "name", "family_name"]
-  write_attributes = ["nickname", "profile", "picture", "email", "name", "family_name"]
+  read_attributes  = ["nickname", "profile", "picture", "email", "given_name", "family_name"]
+  write_attributes = ["nickname", "profile", "picture", "email", "given_name", "family_name"]
   token_validity_units {
     access_token  = "minutes"
     id_token      = "minutes"
