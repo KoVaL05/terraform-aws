@@ -114,18 +114,7 @@ resource "aws_lambda_permission" "default_user_pool_lambdas_permissions" {
 resource "aws_ses_template" "cognito_verification_template" {
   name = "CognitoVerificationTemplate"
 
-  html = <<EOF
-  <html>
-    <head></head>
-    <body>
-      <h1>Welcome to My App!</h1>
-      <p>Thank you for signing up. Your verification code is:</p>
-      <h2>{{code}}</h2>
-      <p>Enter this code on the app to verify your email address.</p>
-      <p>If you didn't request this, please ignore this email.</p>
-    </body>
-  </html>
-  EOF
+  html = file("html-template/verification_template.html")
 
   subject = "Your Verification Code for My App"
   text    = "Your verification code is: {{code}}"
