@@ -25,7 +25,7 @@ resource "aws_cognito_user_pool" "default_user_pool" {
 
   verification_message_template {
     email_subject        = "Your Verification Code for Aethera App"
-    email_message        = file("verification_template.html")
+    email_message        = file("${path.module}/html-template/verification_template.html")
     default_email_option = "CONFIRM_WITH_CODE"
   }
 
