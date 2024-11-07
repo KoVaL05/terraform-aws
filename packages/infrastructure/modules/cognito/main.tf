@@ -24,9 +24,9 @@ resource "aws_cognito_user_pool" "default_user_pool" {
   }
 
   verification_message_template {
+    email_subject       = aws_ses_template.cognito_verification_template.subject
+    email_message       = aws_ses_template.cognito_verification_template.html
     default_email_option = "CONFIRM_WITH_CODE"
-    email_subject        = "Your verification code"
-    email_message        = "Your verification code is {####}. "
   }
 
   schema {
@@ -109,4 +109,24 @@ resource "aws_lambda_permission" "default_user_pool_lambdas_permissions" {
   principal     = "cognito-idp.amazonaws.com"
 
   source_arn = aws_cognito_user_pool.default_user_pool.arn
+}
+
+resource "aws_ses_template" "cognito_verification_template" {
+  name = "CognitoVerificationTemplate"
+
+  html = <<EOF
+  <html>
+    <head></head>
+    <body>
+      <h1>Welcome to My App!</h1>
+      <p>Thank you for signing up. Your verification code is:</p>
+      <h2>{{code}}</h2>
+      <p>Enter this code on the app to verify your email address.</p>
+      <p>If you didn't request this, please ignore this email.</p>
+    </body>
+  </html>
+  EOF
+
+  subject = "Your Verification Code for My App"
+  text    = "Your verification code is: {{code}}"
 }
