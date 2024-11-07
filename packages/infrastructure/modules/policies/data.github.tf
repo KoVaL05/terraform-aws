@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "github_iam_policy_document" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:KoVaL05/terraform-aws:*"]
+      values   = ["repo:KoVaL05/aethera-project:*"]
     }
 
     condition {
