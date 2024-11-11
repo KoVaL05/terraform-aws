@@ -16,3 +16,7 @@ variable "lambda_functions" {
 variable "user_pool_arn" {
   type = string
 }
+
+variable "secret_manager_sns_arn" {
+  type = string
+}

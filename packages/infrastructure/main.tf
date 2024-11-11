@@ -47,9 +47,10 @@ module "secrets_manager" {
 }
 
 module "policies" {
-  source             = "./modules/policies"
-  random_name        = module.random.random_name
-  lambdas_bucket_arn = module.s3.lambdas_bucket_arn
-  lambda_functions   = module.lambdas.lambda_functions
-  user_pool_arn       = module.cognito.user_pool_arn
+  source                 = "./modules/policies"
+  random_name            = module.random.random_name
+  lambdas_bucket_arn     = module.s3.lambdas_bucket_arn
+  lambda_functions       = module.lambdas.lambda_functions
+  user_pool_arn          = module.cognito.user_pool_arn
+  secret_manager_sns_arn = module.secrets_manager.secret_manager_sns_arn
 }
