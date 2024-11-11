@@ -9,7 +9,7 @@ resource "aws_cloudwatch_event_rule" "secrets_manager_event_rule" {
     "source" : ["aws.secretsmanager"],
     "detail-type" : ["AWS API Call via CloudTrail"],
     "detail" : {
-      "eventName" : ["RotateSecret", "UpdateSecret", "PutSecretValue"]
+      "eventName" : ["RotateSecret", "UpdateSecret", "PutSecretValue", "DeleteSecret"]
     }
   })
 }
