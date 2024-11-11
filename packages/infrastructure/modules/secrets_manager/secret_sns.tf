@@ -1,4 +1,4 @@
-resource "aws_sns_topic" "secret_manager_topic" {
+resource "aws_sns_topic" "secrets_manager_topic" {
   name = "SecretsChangeTopic"
 }
 
