@@ -10,6 +10,9 @@ resource "aws_cloudwatch_event_rule" "secrets_manager_event_rule" {
     "detail-type" : ["AWS API Call via CloudTrail"],
     "detail" : {
       "eventName" : ["RotateSecret", "UpdateSecret", "PutSecretValue"]
+      "responseElements": {
+            "arn": [format("arn:aws:secretsmanager:%s:%s:secret:*",data.aws_region.current.name,data.aws_caller_identity.current.account_id)]
+        }
     }
   })
 }
