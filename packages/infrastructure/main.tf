@@ -54,3 +54,4 @@ module "policies" {
   user_pool_arn          = module.cognito.user_pool_arn
   secret_manager_sns_arn = module.secrets_manager.secret_manager_sns_arn
 }
+
