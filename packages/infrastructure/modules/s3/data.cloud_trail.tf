@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "cloud_trail_policy" {
     }
 
     actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.example.arn}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
+    resources = ["${aws_s3_bucket.cloud_trail_bucket.arn}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
 
     condition {
       test     = "StringEquals"
