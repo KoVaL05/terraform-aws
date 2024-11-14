@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "cloud_trail_policy" {
     }
 
     actions   = ["s3:GetBucketAcl"]
-    resources = [aws_s3_bucket.cloud_trail_bucket]
+    resources = [aws_s3_bucket.cloud_trail_bucket.arn]
     condition {
       test     = "StringEquals"
       variable = "aws:SourceArn"
