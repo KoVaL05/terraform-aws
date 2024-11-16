@@ -17,10 +17,6 @@ resource "aws_cognito_user_pool" "default_user_pool" {
       name     = "verified_email"
       priority = 1
     }
-    recovery_mechanism {
-      name = "admin_only"
-      priority = 2
-    }
   }
 
   email_configuration {
