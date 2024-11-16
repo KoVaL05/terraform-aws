@@ -34,7 +34,9 @@ data "aws_iam_policy_document" "lambda_policies" {
       sid = "RoleForLinkingUsers"
       actions = [
         "cognito-idp:ListUsers",
-        "cognito-idp:AdminLinkProviderForUser"
+        "cognito-idp:AdminLinkProviderForUser",
+        "cognito-idp:AdminCreateUser",
+        "cognito-idp:AdminSetUserPassword"
       ]
       effect = "Allow"
       resources = [

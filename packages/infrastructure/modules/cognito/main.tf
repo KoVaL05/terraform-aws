@@ -14,8 +14,12 @@ resource "aws_cognito_user_pool" "default_user_pool" {
 
   account_recovery_setting {
     recovery_mechanism {
-      name     = "admin_only"
+      name     = "verified_email"
       priority = 1
+    }
+    recovery_mechanism {
+      name = "admin_only"
+      priority = 2
     }
   }
 
