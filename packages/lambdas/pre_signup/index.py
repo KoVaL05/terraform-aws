@@ -1,35 +1,83 @@
 import boto3
-from typing import List
+from typing import List, ReadOnly
 from enum import Enum
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from mypy_boto3_cognito_idp.client import CognitoIdentityProviderClient
 from mypy_boto3_cognito_idp.type_defs import UserTypeTypeDef
-
-from aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event import PreSignUpTriggerEvent
+from typing import TypedDict
+from aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event import (
+    PreSignUpTriggerEvent,
+)
+import secrets
 
 logger = Logger()
 
-def get_user_by_email(email: str, userPoolId: str, cognitoClient: CognitoIdentityProviderClient) -> List[UserTypeTypeDef]:
-    return cognitoClient.list_users(
-        UserPoolId=userPoolId,
-        Filter=f'email = "{email}"',
-        Limit=2
-    ).get("Users",[])
 
-def link_provider_to_user(username: str, userPoolId: str, providerName: str, providerUserId: str, cognitoClient: CognitoIdentityProviderClient):
+class UserAttributes(TypedDict):
+    GivenName: ReadOnly[str]
+    FamilyName: ReadOnly[str]
+    Email: ReadOnly[str]
+    EmailVerified: ReadOnly[bool]
+
+
+def set_user_password(
+    user: UserTypeTypeDef, userPoolId: str, cognitoClient: CognitoIdentityProviderClient
+):
+    cognitoClient.admin_set_user_password(
+        UserPoolId=userPoolId,
+        Username=user["Username"],
+        Password=secrets.token_urlsafe(13),
+        Permanent=True,
+    )
+
+
+def create_user(
+    userAttributes: UserAttributes,
+    userPoolId: str,
+    cognitoClient: CognitoIdentityProviderClient,
+) -> UserTypeTypeDef:
+    return cognitoClient.admin_create_user(
+        UserPoolId=userPoolId,
+        Username=userAttributes["Email"],
+        MessageAction="SUPPRESS",
+        UserAttributes=[
+            {"Name": "given_name", "Value": userAttributes["GivenName"]},
+            {"Name": "family_name", "Value": userAttributes["FamilyName"]},
+            {"Name": "email_verified", "Value": userAttributes["EmailVerified"]},
+        ],
+    ).get("User", [])
+
+
+def get_user_by_email(
+    email: str, userPoolId: str, cognitoClient: CognitoIdentityProviderClient
+) -> List[UserTypeTypeDef]:
+    return cognitoClient.list_users(
+        UserPoolId=userPoolId, Filter=f'email = "{email}"', Limit=2
+    ).get("Users", [])
+
+
+def link_provider_to_user(
+    user: UserTypeTypeDef,
+    userPoolId: str,
+    providerName: str,
+    providerUserId: str,
+    cognitoClient: CognitoIdentityProviderClient,
+):
     return cognitoClient.admin_link_provider_for_user(
         UserPoolId=userPoolId,
         DestinationUser={
-            'ProviderName': 'Cognito',
-            'ProviderAttributeValue': username
+            "ProviderName": "Cognito",
+            "ProviderAttributeValue": user["Username"],
         },
         SourceUser={
-            'ProviderName': providerName,
-            'ProviderAttributeName': 'Cognito_Subject',
-            'ProviderAttributeValue': providerUserId
-        }
+            "ProviderName": providerName,
+            "ProviderAttributeName": "Cognito_Subject",
+            "ProviderAttributeValue": providerUserId,
+        },
     )
+
+
 class PreSignUpTriggerSource(Enum):
     COGNITO_SIGNUP = "PreSignUp_SignUp"
     EXTERNAL_PROVIDER = "PreSignUp_ExternalProvider"
@@ -38,21 +86,58 @@ class PreSignUpTriggerSource(Enum):
     @classmethod
     def _missing_(cls, _value):
         return cls.UNKNOWN
-    
+
+
 @logger.inject_lambda_context
 def handler(event: dict, context: LambdaContext):
-    logger.info("TEST")
-    print("EVENT",event)
-    print("CONTEXT",context)
-    cognitoClient: CognitoIdentityProviderClient = boto3.client('cognito-idp')
+    cognitoClient: CognitoIdentityProviderClient = boto3.client("cognito-idp")
     translatedEvent = PreSignUpTriggerEvent(event)
     triggerSource = PreSignUpTriggerSource(translatedEvent.trigger_source)
     logger.info(f"TRIGGERSOURCE {triggerSource}")
     if triggerSource == PreSignUpTriggerSource.EXTERNAL_PROVIDER:
-        usersResult = get_user_by_email(translatedEvent.request.user_attributes["email"], translatedEvent.user_pool_id, cognitoClient)
+        usersResult = get_user_by_email(
+            translatedEvent.request.user_attributes["email"],
+            translatedEvent.user_pool_id,
+            cognitoClient,
+        )
+        [providerName, providerUserId] = translatedEvent.user_name.split("_")
         logger.info(f"USERRESULT {usersResult}")
         if len(usersResult) > 0:
-            [providerName,providerUserId] = translatedEvent.user_name.split("_")
-            res = link_provider_to_user(usersResult[0]["Username"], translatedEvent.user_pool_id, providerName, providerUserId, cognitoClient)
+            user = usersResult[0]
+            res = link_provider_to_user(
+                user,
+                translatedEvent.user_pool_id,
+                providerName,
+                providerUserId,
+                cognitoClient,
+            )
+            logger.info(f"RESULT {res}")
+        else:
+            user = create_user(
+                UserAttributes(
+                    {
+                        "Email": translatedEvent.request.user_attributes["email"],
+                        "FamilyName": translatedEvent.request.user_attributes[
+                            "family_name"
+                        ],
+                        "GivenName": translatedEvent.request.user_attributes[
+                            "given_name"
+                        ],
+                        "EmailVerified": translatedEvent.request.user_attributes[
+                            "email_verified"
+                        ],
+                    }
+                ),
+                translatedEvent.user_pool_id,
+                cognitoClient,
+            )
+            set_user_password(user, translatedEvent.user_pool_id, cognitoClient)
+            res = link_provider_to_user(
+                user,
+                translatedEvent.user_pool_id,
+                providerName,
+                providerUserId,
+                cognitoClient,
+            )
             logger.info(f"RESULT {res}")
     return event
