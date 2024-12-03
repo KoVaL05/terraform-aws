@@ -39,6 +39,11 @@ module "cognito" {
   lambda_functions      = module.lambdas.lambda_functions
 }
 
+module "appsync" {
+  source = "./modules/appsync"
+  user_pool_id = module.cognito.user_pool_id
+}
+
 module "secrets_manager" {
   source = "./modules/secrets_manager"
   aethera_app_secret = { userPoolId = module.cognito.client_pool_id
