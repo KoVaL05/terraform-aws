@@ -47,7 +47,7 @@ module "appsync" {
 
 module "secrets_manager" {
   source = "./modules/secrets_manager"
-  aethera_app_secret = { userPoolId = module.cognito.client_pool_id
+  aethera_app_secret = { userPoolId = module.cognito.user_pool_id
   clientPoolId = module.cognito.user_pool_id }
 
 }
@@ -63,4 +63,3 @@ module "policies" {
   api_key_table_arn      = module.dynamodb.api_key_table_arn
   appsync_role_id        = module.appsync.appsync_role_id
 }
-
