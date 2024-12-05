@@ -6,7 +6,10 @@ resource "aws_cloudtrail" "sm_cloud_trail" {
 
   advanced_event_selector {
     name = "SecretsManagerSelector"
-
+    field_selector {
+      field         = "eventCategory"
+      equals        = ["Management"]
+    }
     field_selector {
       field  = "eventSource"
       equals = ["secretsmanager.amazonaws.com"]
