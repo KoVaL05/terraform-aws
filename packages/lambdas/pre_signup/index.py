@@ -13,6 +13,8 @@ import secrets
 
 logger = Logger()
 
+cognitoClient: CognitoIdentityProviderClient = boto3.client("cognito-idp")
+
 
 class UserAttributes(TypedDict):
     GivenName: ReadOnly[str]
@@ -21,9 +23,7 @@ class UserAttributes(TypedDict):
     EmailVerified: ReadOnly[bool]
 
 
-def set_user_password(
-    user: UserTypeTypeDef, userPoolId: str, cognitoClient: CognitoIdentityProviderClient
-):
+def set_user_password(user: UserTypeTypeDef, userPoolId: str):
     cognitoClient.admin_set_user_password(
         UserPoolId=userPoolId,
         Username=user["Username"],
@@ -32,11 +32,7 @@ def set_user_password(
     )
 
 
-def create_user(
-    userAttributes: UserAttributes,
-    userPoolId: str,
-    cognitoClient: CognitoIdentityProviderClient,
-) -> UserTypeTypeDef:
+def create_user(userAttributes: UserAttributes, userPoolId: str) -> UserTypeTypeDef:
     return cognitoClient.admin_create_user(
         UserPoolId=userPoolId,
         Username=userAttributes["Email"],
@@ -49,20 +45,14 @@ def create_user(
     ).get("User", [])
 
 
-def get_user_by_email(
-    email: str, userPoolId: str, cognitoClient: CognitoIdentityProviderClient
-) -> List[UserTypeTypeDef]:
+def get_user_by_email(email: str, userPoolId: str) -> List[UserTypeTypeDef]:
     return cognitoClient.list_users(
         UserPoolId=userPoolId, Filter=f'email = "{email}"', Limit=2
     ).get("Users", [])
 
 
 def link_provider_to_user(
-    user: UserTypeTypeDef,
-    userPoolId: str,
-    providerName: str,
-    providerUserId: str,
-    cognitoClient: CognitoIdentityProviderClient,
+    user: UserTypeTypeDef, userPoolId: str, providerName: str, providerUserId: str
 ):
     return cognitoClient.admin_link_provider_for_user(
         UserPoolId=userPoolId,
@@ -90,7 +80,6 @@ class PreSignUpTriggerSource(Enum):
 
 @logger.inject_lambda_context
 def handler(event: dict, context: LambdaContext):
-    cognitoClient: CognitoIdentityProviderClient = boto3.client("cognito-idp")
     translatedEvent = PreSignUpTriggerEvent(event)
     triggerSource = PreSignUpTriggerSource(translatedEvent.trigger_source)
     logger.info(f"TRIGGERSOURCE {triggerSource}")
@@ -98,7 +87,6 @@ def handler(event: dict, context: LambdaContext):
         usersResult = get_user_by_email(
             translatedEvent.request.user_attributes["email"],
             translatedEvent.user_pool_id,
-            cognitoClient,
         )
         [providerName, providerUserId] = translatedEvent.user_name.split("_")
         logger.info(f"USERRESULT {usersResult}")
@@ -109,7 +97,6 @@ def handler(event: dict, context: LambdaContext):
                 translatedEvent.user_pool_id,
                 providerName,
                 providerUserId,
-                cognitoClient,
             )
             logger.info(f"RESULT {res}")
         else:
@@ -129,15 +116,13 @@ def handler(event: dict, context: LambdaContext):
                     }
                 ),
                 translatedEvent.user_pool_id,
-                cognitoClient,
             )
-            set_user_password(user, translatedEvent.user_pool_id, cognitoClient)
+            set_user_password(user, translatedEvent.user_pool_id)
             res = link_provider_to_user(
                 user,
                 translatedEvent.user_pool_id,
                 providerName,
                 providerUserId,
-                cognitoClient,
             )
             logger.info(f"RESULT {res}")
     return event

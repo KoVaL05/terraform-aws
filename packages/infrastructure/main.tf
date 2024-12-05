@@ -39,6 +39,12 @@ module "cognito" {
   lambda_functions      = module.lambdas.lambda_functions
 }
 
+module "appsync" {
+  source             = "./modules/appsync"
+  user_pool_id       = module.cognito.user_pool_id
+  api_key_table_name = module.dynamodb.api_key_table_name
+}
+
 module "secrets_manager" {
   source = "./modules/secrets_manager"
   aethera_app_secret = { userPoolId = module.cognito.client_pool_id
@@ -53,5 +59,8 @@ module "policies" {
   lambda_functions       = module.lambdas.lambda_functions
   user_pool_arn          = module.cognito.user_pool_arn
   secret_manager_sns_arn = module.secrets_manager.secret_manager_sns_arn
+  api_key_appsync_arn    = module.appsync.api_key_appsync_arn
+  api_key_table_arn      = module.dynamodb.api_key_table_arn
+  appsync_role_id        = module.appsync.appsync_role_id
 }
 
