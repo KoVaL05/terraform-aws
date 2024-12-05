@@ -31,7 +31,7 @@ resource "aws_dynamodb_table" "api_key_table" {
     hash_key           = "keyType"
     range_key          = "userId"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["value", "createAt"]
+    non_key_attributes = ["value", "createdAt"]
   }
 
   global_secondary_index {
@@ -39,7 +39,7 @@ resource "aws_dynamodb_table" "api_key_table" {
     hash_key           = "userId"
     range_key          = "keyType"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["value", "createAt"]
+    non_key_attributes = ["value", "createdAt"]
   }
 
   global_secondary_index {
@@ -47,6 +47,6 @@ resource "aws_dynamodb_table" "api_key_table" {
     hash_key           = "value"
     range_key          = "userId"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["keyType", "createAt"]
+    non_key_attributes = ["keyType", "createdAt"]
   }
 }

@@ -5,7 +5,8 @@ resource "aws_appsync_graphql_api" "api_key_public" {
   user_pool_config {
     aws_region     = data.aws_region.current.name
     user_pool_id   = var.user_pool_id
-    default_action = "DENY"
+
+    default_action = "ALLOW"
   }
 
   schema               = data.local_file.api_key_schema.content
