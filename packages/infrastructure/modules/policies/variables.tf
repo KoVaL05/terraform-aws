@@ -20,3 +20,15 @@ variable "user_pool_arn" {
 variable "secret_manager_sns_arn" {
   type = string
 }
+
+variable "api_key_appsync_arn" {
+  type = string
+}
+
+variable "api_key_table_arn" {
+  type = string
+}
+
+variable "appsync_role_id" {
+  type = string
+}

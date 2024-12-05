@@ -1,52 +1,52 @@
 resource "aws_dynamodb_table" "api_key_table" {
   name         = format("api_key_table_%s", var.random_name)
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "ID"
+  hash_key     = "id"
 
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
   attribute {
-    name = "ID"
+    name = "id"
     type = "S"
   }
 
   attribute {
-    name = "UID"
+    name = "userId"
     type = "S"
   }
 
   attribute {
-    name = "KeyType"
+    name = "keyType"
     type = "S"
   }
 
   attribute {
-    name = "ApiKey"
+    name = "value"
     type = "S"
   }
 
   global_secondary_index {
     name               = "KeyTypeIndex"
-    hash_key           = "KeyType"
-    range_key          = "UID"
+    hash_key           = "value"
+    range_key          = "userId"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["ApiKey", "Timestamp"]
+    non_key_attributes = ["value", "createAt"]
   }
 
   global_secondary_index {
     name               = "UIDIndex"
-    hash_key           = "UID"
-    range_key          = "KeyType"
+    hash_key           = "userId"
+    range_key          = "value"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["ApiKey", "Timestamp"]
+    non_key_attributes = ["value", "createAt"]
   }
 
   global_secondary_index {
     name               = "APIKeyIndex"
-    hash_key           = "ApiKey"
-    range_key          = "UID"
+    hash_key           = "value"
+    range_key          = "userId"
     projection_type    = "INCLUDE"
-    non_key_attributes = ["KeyType", "Timestamp"]
+    non_key_attributes = ["value", "createAt"]
   }
 }
