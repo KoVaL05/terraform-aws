@@ -3,7 +3,7 @@ import { scan } from "@aws-appsync/utils/dynamodb";
 
 export function request(ctx) {
   const { filter, limit, nextToken } = ctx.args;
-
+  console.log(filter);
   return scan({
     limit,
     nextToken,
