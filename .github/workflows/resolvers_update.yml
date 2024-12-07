@@ -1,0 +1,29 @@
+name: Resolvers - Deploy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/resolvers/**"
+
+jobs:
+  deploy:
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: packages/resolvers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create terraform run to update lamdas from S3
+        uses: indiesdev/curl@v1.1
+        with:
+          url: https://app.terraform.io/api/v2/runs
+          method: "POST"
+          accept: 201
+          headers: '{ "Content-Type": "application/vnd.api+json" }'
+          bearer-token: ${{ secrets.TERRAFORM_TOKEN }}
+          body: '{"data":{"type":"runs","attributes":{"message":"Triggered by GitHub Action","auto-apply":true},"relationships":{"workspace":{"data":{"type":"workspaces","id":"${{ secrets.TERRAFORM_WORKSPACE_ID }}"}}}}}'
+          log-response: true
