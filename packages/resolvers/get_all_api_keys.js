@@ -2,12 +2,17 @@ import { util } from "@aws-appsync/utils";
 import { scan } from "@aws-appsync/utils/dynamodb";
 
 export function request(ctx) {
-  const { filter, limit, nextToken } = ctx.args;
-  console.log(filter);
+  const { limit, nextToken } = ctx.args;
   return scan({
     limit,
     nextToken,
-    filter,
+    filter: {
+      expression: "(#user_id,:sub)",
+      expressionNames: { "#user_id": "userId" },
+      expressionValues: {
+        ":sub": { S: ctx.identity.sub },
+      },
+    },
   });
 }
 
