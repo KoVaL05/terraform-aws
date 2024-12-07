@@ -7,7 +7,7 @@ locals {
       data_source = "api_key_table"
     }
     "getAllApiKeys" = {
-      path = "../resolvers/get_api_key.js"
+      path = "../resolvers/get_all_api_keys.js"
       kind = "UNIT"
       type = "Query"
       data_source = "api_key_table"
