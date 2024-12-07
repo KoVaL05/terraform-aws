@@ -1,8 +1,40 @@
-type API_KEY @aws_cognito_user_pools {
+type API_KEY {
   id: String!
-  ownerId: String!
-  type: String!
-  creationAt: AWSDateTime!
+  userId: String!
+  keyType: String!
+  createdAt: AWSTimestamp!
+}
+
+input ApiKeyFilterInput {
+  id: TableStringFilterInput
+  keyType: TableStringFilterInput
+  createdAt: TableIntFilterInput
+}
+
+input TableIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+}
+
+input TableStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  size: ModelSizeInput
 }
 
 type Mutation {
@@ -12,8 +44,12 @@ type Mutation {
 }
 
 type Query {
-  getApiKey(id: String!): API_KEY @aws_cognito_user_pools
-  getApiKeys: [API_KEY] @aws_cognito_user_pools @live
+  getApiKey(id: String!): API_KEY
+  getAllApiKeys(
+    filter: ApiKeyFilterInput
+    limit: Int
+    nextToken: String
+  ): [API_KEY] @aws_cognito_user_pools @live
 }
 
 type Subscription {
