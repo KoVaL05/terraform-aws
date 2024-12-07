@@ -1,8 +1,8 @@
-type API_KEY @aws_cognito_user_pools {
+type API_KEY {
   id: String!
-  ownerId: String!
-  type: String!
-  creationAt: AWSDateTime!
+  userId: String!
+  keyType: String!
+  createdAt: AWSTimestamp!
 }
 
 type Mutation {
@@ -12,8 +12,10 @@ type Mutation {
 }
 
 type Query {
-  getApiKey(id: String!): API_KEY @aws_cognito_user_pools
-  getApiKeys: [API_KEY] @aws_cognito_user_pools @live
+  getApiKey(id: String!): API_KEY
+  getAllApiKeys(limit: Int, nextToken: String): [API_KEY]
+    @aws_cognito_user_pools
+    @live
 }
 
 type Subscription {

@@ -1,11 +1,11 @@
 import { util } from "@aws-appsync/utils";
-import { get } from "@aws-appsync/utils/dynamodb";
+import { scan } from "@aws-appsync/utils/dynamodb";
 
 export function request(ctx) {
-  const { id } = ctx.args;
-  const key = { id };
-  return get({
-    key,
+  const { limit, nextToken } = ctx.args;
+  return scan({
+    limit,
+    nextToken,
     filter: {
       expression: "(#user_id,:sub)",
       expressionNames: { "#user_id": "userId" },
@@ -21,5 +21,6 @@ export function response(ctx) {
   if (error) {
     return util.appendError(error.message, error.type, result);
   }
-  return result;
+  const { items = [], nextToken } = result;
+  return { items, nextToken };
 }
