@@ -1,13 +1,13 @@
 locals {
   resolvers = {
     "getApiKey" = {
-      path = "../resolvers/get_api_key.js"
+      path = "../resolvers/getApiKey"
       kind = "UNIT"
       type = "Query"
       data_source = "api_key_table"
     }
     "getAllApiKeys" = {
-      path = "../resolvers/get_all_api_keys.js"
+      path = "../resolvers/getAllApiKeys"
       kind = "UNIT"
       type = "Query"
       data_source = "api_key_table"
