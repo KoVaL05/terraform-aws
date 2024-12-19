@@ -44,4 +44,20 @@ data "aws_iam_policy_document" "lambda_policies" {
       ]
     }
   }
+
+  dynamic "statement" {
+    for_each = each.value.permissions.api_key_table == "write" ? [each.key] : []
+
+    content {
+      sid = "RoleForWritingApiKeys"
+      actions = [
+        "dynamodb:PutItem"
+      ]
+      effect = "Allow"
+      resources = [
+        format("%s/*",var.api_key_table_arn),
+        var.api_key_table_arn
+      ]
+    }
+  }
 }

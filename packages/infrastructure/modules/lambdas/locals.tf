@@ -5,6 +5,8 @@ locals {
       allow_userpool_execution = false
       permissions = {
         link_users = false
+        api_key_table = "none"
+        kms_api_key = false
       }
     },
     "pre_signup" = {
@@ -12,7 +14,19 @@ locals {
       allow_userpool_execution = true
       permissions = {
         link_users = true
+        api_key_table = "none"
+        kms_api_key = false
       }
     },
+    "create_api_key" = {
+      allow_agent_execution    = false
+      allow_userpool_execution = false
+
+      permissions = {
+        link_users = false
+        api_key_table = "write"
+        kms_api_key = true
+      }
+    }
   }
 }
